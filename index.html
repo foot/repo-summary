@@ -1,0 +1,39 @@
+<!doctype html>
+<html ng-app="">
+  <head>
+    <title>Where am I?</title>
+    <link rel="stylesheet" href="components/bootstrap/docs/assets/css/bootstrap.css" type="text/css" media="screen" charset="utf-8">
+  </head>
+
+  <body ng-controller='MainCtrl'>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="#">Logs</a>
+        <form class="navbar-form" ng-submit="update()">
+          <input type="text" ng-model="rootPath" ng-model-onblur>
+          <button class='btn'><i class="icon-refresh"></i></button>
+        </form>
+      </div>
+    </div>
+
+    <table class='table table-striped'>
+      <tr><th>Repo</th><th>Branch</th><th>Status</th><th>Up</th><th>Pull</th></tr>
+      <tr ng-repeat="repo in repos">
+        <td>{{repo.name}}</td>
+        <td>{{repo.branch}}</td>
+        <td>{{repo.commit}}</td>
+        <td>{{repo.update}}</td>
+        <td>{{repo.remote}}</td>
+      </tr>
+    </table>
+
+    <script src='jquery-1.7.2.js'></script>
+    <script src='angular.js'></script>
+    <script src='app.js'></script>
+    <script src='hg_overview.js'></script>
+
+  </body>
+
+</html>
+
