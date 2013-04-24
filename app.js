@@ -1,4 +1,4 @@
-/*global angular,require,console*/
+/*global require,console*/
 
 
 (function() {
@@ -7,9 +7,11 @@
 
 var root = this;
 
+
 var _ = require('underscore');
 
-var hgOverview = require('./hg_overview');
+
+var HgOverview = require('./hg-overview');
 
 
 var ROOT_PATH = '/Users/simon/pld/default/';
@@ -23,7 +25,7 @@ root.MainCtrl = function($scope) {
 
         $scope.repos = [];
 
-        hgOverview.getRepos($scope.rootPath, function(err, repos) {
+        HgOverview.getRepos($scope.rootPath, function(err, repos) {
 
             repos = repos.slice(1, 10);
 
@@ -35,7 +37,7 @@ root.MainCtrl = function($scope) {
                 });
             });
 
-            hgOverview.getReposStatus(repos, function(err, path, summary) {
+            HgOverview.getReposStatus(repos, function(err, path, summary) {
                 $scope.$apply(function() {
 
                     var repo = _($scope.repos).find(function(r) {

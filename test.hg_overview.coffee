@@ -1,6 +1,6 @@
 
 expect = require('chai').expect
-hgOverview = require './hg_overview'
+HgOverview = require './hg-overview'
 
 
 describe 'Parsing the hg summary output', ->
@@ -14,7 +14,7 @@ describe 'Parsing the hg summary output', ->
   """
 
   it 'should parse it into an object', ->
-    res = hgOverview.parseSummary(data)
+    res = HgOverview.parseSummary(data)
 
     console.log res
     expect(res.commit).to.equal('(clean)')
