@@ -3,6 +3,7 @@
   <head>
     <title>Where am I?</title>
     <link rel="stylesheet" href="components/bootstrap/docs/assets/css/bootstrap.css" type="text/css" media="screen" charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
   </head>
 
   <body ng-controller='MainCtrl'>
@@ -17,6 +18,8 @@
       </div>
     </div>
 
+    <div class='diagram'></div>
+
     <table class='table table-striped'>
       <tr><th>Repo</th><th>Branch</th><th>Status</th><th>Up</th><th>Pull</th></tr>
       <tr ng-repeat="repo in repos">
@@ -30,6 +33,9 @@
 
     <script src='jquery-1.7.2.js'></script>
     <script src='angular.js'></script>
+    <script src='components/d3/d3.js'></script>
+
+    <script src='dir-graph.js'></script>
 
     <script src='app.js'></script>
 

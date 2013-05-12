@@ -76,7 +76,9 @@ var getSummary = function(path, callback) {
 
 
 var getRepos = function(path, callback) {
-    getOutput(spawn('find', [ path, '-name', '.hg', '-depth', '2' ]), function(err, output) {
+    var find = spawn('find', [ path, '-name', '.hg', '-maxdepth', '3' ]);
+
+    getOutput(find, function(err, output) {
         var repos = output.trim().split('\n').map(function(line) {
             var parts = line.split('/');
             return parts.slice(0, parts.length - 1).join('/');
