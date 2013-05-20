@@ -5,48 +5,40 @@ var root = this;
 
 
 var _ = require('underscore');
-var HgOverview = require('./hg-overview');
+var HgOverview = require('./src/hg-overview');
 
 
-var ROOT_PATH = '/Users/simon/pld/3.0.1/';
+var ROOT_PATH = '/Users/simon/src/';
 
 
 root.MainCtrl = function($scope) {
 
     $scope.rootPath = ROOT_PATH;
 
-    var dirs = [
-        '/a/b/c',
-        '/a/b',
-        '/a/b/d',
-        '/a/c/a',
-        '/a/c/b',
-        '/b',
-        '/e/d/1/2/3/5/',
-        '/e/d/f/g/h'
-    ];
-
-    var g = root.Graph();
-
-    // var data = root.massageDirList(dirs);
-
+    var svg = root.newSvg('.diagram');
+    var chart = root.newChart();
     var fitToWindow = function() { 
-        g.width($(this).width());
+        svg.resize($(window).width(), 500);
+
+        chart.width($(window).width());
+        chart.height(500);
     };
-    $(window).on('resize', fitToWindow);
     fitToWindow();
+    $(window).on('resize', fitToWindow);
+
+
+    $scope.$watch('repos', function(newVal, oldVal) {
+
+      svg.datum(massageDirList($scope.repos))
+          .call(chart);
+
+    }, true);
 
     $scope.update = function() {
 
         $scope.repos = [];
 
         HgOverview.getRepos($scope.rootPath, function(err, repos) {
-
-            d3.select('.diagram')
-                .datum(massageDirList(repos))
-                .call(g);
-
-            repos = repos.slice(1, 10);
 
             $scope.$apply(function() {
                 $scope.repos = repos.map(function(path) {
@@ -73,5 +65,4 @@ root.MainCtrl = function($scope) {
     };
 
     $scope.update();
-
 };
