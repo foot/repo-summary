@@ -1,6 +1,6 @@
 
 expect = require('chai').expect
-g = require './dir-graph'
+g = require './directory-chart'
 
 describe "collapseRoot", ->
 
@@ -27,3 +27,13 @@ describe "collapseRoot", ->
         { name: 'e' }
       ]
 
+describe 'massageDirList', ->
+
+  it 'should turn a flat list into a nested tree!', ->
+
+    dirs = [
+      { name: '/a/' }
+      { name: '/a/b' }
+    ]
+
+    res = g.massageDirList dirs

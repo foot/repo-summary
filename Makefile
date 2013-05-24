@@ -1,4 +1,4 @@
 
 test:
-	mocha --ui bdd test.* --compilers coffee:coffee-script
+	mocha --ui bdd src/test.* --compilers coffee:coffee-script
 

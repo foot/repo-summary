@@ -26,12 +26,32 @@ root.MainCtrl = function($scope) {
     fitToWindow();
     $(window).on('resize', fitToWindow);
 
+    chart
+        .on('mouseover', function(d) {
+          var c = chart.arc.centroid(d);
+          var x = svg.x.invert(c[0]);
+          var y = svg.y.invert(c[1]);
+          var placement = c[1] > 0 ? 'top' : 'bottom';
+          $(this)
+              .popover({
+                title: d.name,
+                content: d.branch,
+                trigger: 'manual',
+                container: '.diagram',
+                placement: placement
+              })
+              .popover('show');
+              // grab the popover!
+              // .data('popover')
+                  // .applyPlacement({ left: x, top: y }, 'top');
+        })
+        .on('mouseout', function(d) {
+          $(this).popover('destroy');
+        });
 
-    $scope.$watch('repos', function(newVal, oldVal) {
-
+    $scope.$watch('repos', function() {
       svg.datum(massageDirList($scope.repos))
           .call(chart);
-
     }, true);
 
     $scope.update = function() {

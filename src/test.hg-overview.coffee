@@ -27,8 +27,7 @@ describe 'getRepos', ->
 
     HgOverview.getRepos '/Users/simon/pld/3.0.1/', (err, repos) ->
 
-      console.log 'derp'
-      console.log repos
+      # console.log repos
 
       done()
 
