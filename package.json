@@ -1,0 +1,22 @@
+{
+  "name": "repo-summary",
+  "description": "Repo Summary",
+  "version": "v0.1.0",
+  "main": "index.html",
+  "dependencies": {
+    "underscore": "~1.4.4"
+  },
+  "devDependencies": {
+    "mocha": "~1.10.0",
+    "chai": "~1.6.0",
+    "coffee-script": "~1.6.2"
+  },
+  "window": {
+    "width": 660,
+    "height": 660
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/foot/repo-summary.git"
+  }
+}

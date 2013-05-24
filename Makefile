@@ -1,4 +1,6 @@
 
+MOCHA=node_modules/mocha/bin/mocha
+
 test:
-	mocha --ui bdd src/test.* --compilers coffee:coffee-script
+	${MOCHA} --ui bdd src/test.* --compilers coffee:coffee-script
 
