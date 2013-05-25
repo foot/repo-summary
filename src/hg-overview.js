@@ -76,7 +76,12 @@ var getSummary = function(path, callback) {
 
 
 var getRepos = function(path, callback) {
-    var find = spawn('find', [ path, '-name', '.hg', '-maxdepth', '3' ]);
+
+    path = path.replace(/^~/, process.env.HOME);
+
+    var find = spawn('find', [
+      path, '-type', 'd', '-name', '.hg', '-maxdepth', '3'
+    ]);
 
     getOutput(find, function(err, output) {
         var repos = output.trim().split('\n').map(function(line) {
@@ -96,7 +101,7 @@ var getReposStatus = function(repos, callback, finished) {
                 callback(err, path, summary);
             });
         };
-    }), 4, finished);
+    }), 5, finished);
 };
 
 

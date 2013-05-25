@@ -8,7 +8,7 @@ var _ = require('underscore');
 var HgOverview = require('./src/hg-overview');
 
 
-var ROOT_PATH = '/Users/simon/src/';
+var ROOT_PATH = '~/src';
 
 
 root.MainCtrl = function($scope) {

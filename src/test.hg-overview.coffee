@@ -25,7 +25,7 @@ describe 'getRepos', ->
 
   it 'should list all the dirs!', (done) ->
 
-    HgOverview.getRepos '/Users/simon/pld/3.0.1/', (err, repos) ->
+    HgOverview.getRepos '~/src', (err, repos) ->
 
       # console.log repos
 
