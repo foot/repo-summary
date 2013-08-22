@@ -27,7 +27,8 @@ describe 'getRepos', ->
 
     HgOverview.getRepos '~/src', (err, repos) ->
 
-      # console.log repos
+      console.log 'der'
+      console.log repos
 
       done()
 

@@ -11,43 +11,11 @@ var root = this;
 var _ = require('underscore');
 var async = require('async');
 var spawn = require('child_process').spawn;
+var es = require('event-stream');
+var cs = require('./hg-commandserver');
+
 var hgSummary = function(repoPath, filename, range) {
     return spawn('hg', [ 'summary', '-R', repoPath ]);
-};
-
-
-var getOutput = function(proc, cb) {
-
-    [ proc.stdout, proc.stderr ].forEach(function(stream) {
-        stream.setEncoding('utf8');
-    });
-
-    var stdout = '';
-    var stderr = '';
-
-    var stdoutEnd = false;
-    var stderrEnd = false;
-    var done = function() {
-        if (stdoutEnd && stderrEnd) {
-            cb(stderr, stdout);
-        }
-    };
-
-    proc.stdout.on('data', function(data) {
-        stdout = stdout + data;
-    });
-    proc.stderr.on('data', function(data) {
-        stderr = stderr + data;
-    });
-    proc.stderr.on('end', function() {
-        stderrEnd = true;
-        done();
-    });
-    proc.stdout.on('end', function() {
-        stdoutEnd = true;
-        done();
-    });
-
 };
 
 
@@ -68,10 +36,12 @@ var parseSummary = function(data) {
 };
 
 
-var getSummary = function(path, callback) {
-    getOutput(hgSummary(path), function(err, output) {
-        callback(err.trim(), parseSummary(output.trim()));
-    });
+var getSummary = function(server, repo, done) {
+  cs.runCommand(server, [ '-R', repo, 'summary' ]).output
+    .pipe(es.writeArray(function(err, array) {
+      var value = parseSummary(array.join('').trim());
+      done(null, value);
+    }));
 };
 
 
@@ -82,26 +52,61 @@ var getRepos = function(path, callback) {
     var find = spawn('find', [
       path, '-type', 'd', '-name', '.hg', '-maxdepth', '3'
     ]);
+    find.stdout.setEncoding('utf8');
 
-    getOutput(find, function(err, output) {
-        var repos = output.trim().split('\n').map(function(line) {
-            var parts = line.split('/');
-            return parts.slice(0, parts.length - 1).join('/');
-        });
-        callback(err, repos);
-    });
+    es.pipeline(
+      find.stdout,
+      es.split(),
+      es.mapSync(function(line) {
+        if (!line) {
+          return;
+        }
+
+        var parts = line.split('/');
+        return parts.slice(0, parts.length - 1).join('/');
+      }),
+
+      // not so pipey in the end.
+      es.writeArray(function(err, array) {
+        callback(err, array);
+      })
+    );
+};
+
+
+var _getReposStatus = function(server, repos, taskFinished, allFinished) {
+  var tasks = repos.map(function(path) {
+    return function(done) {
+      getSummary(server, path, function(err, summary) {
+        taskFinished(err, path, summary);
+        done();
+      });
+    };
+  });
+
+  async.series(tasks, allFinished);
 };
 
 
 var getReposStatus = function(repos, callback, finished) {
-    async.parallelLimit(repos.map(function(path) {
-        return function(done) {
-            getSummary(path, function(err, summary) {
-                done();
-                callback(err, path, summary);
-            });
-        };
-    }), 5, finished);
+
+  // split up the work across all the repos.
+  var n = Math.min(5, repos.length);
+  var l = Math.floor(repos.length / n);
+  var repoSlices = _.range(n).map(function(i) {
+    return repos.slice(i * l, (i + 1) * l);
+  });
+
+  var tasks = repoSlices.map(function(repos) {
+    var server = cs.commandServer();
+    return function(done) {
+      server.start(repos[0], function() {
+        _getReposStatus(server, repos, callback, done);
+      });
+    };
+  });
+
+  async.parallel(tasks, finished);
 };
 
 

@@ -72,7 +72,7 @@ root.MainCtrl = function($scope) {
                 $scope.$apply(function() {
 
                     var repo = _($scope.repos).find(function(r) {
-                        return r.name == path.slice($scope.rootPath.length);
+                        return r.name === path.slice($scope.rootPath.length);
                     });
 
                     _(repo).extend(summary);
