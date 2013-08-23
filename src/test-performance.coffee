@@ -13,7 +13,7 @@ describe 'Performance of different approches', ->
 
     @timeout 0
 
-    HgOverview.getRepos '~/pld', (err, repos) ->
+    HgOverview.getRepos '~/pld/', (err, repos) ->
 
       HgOverview.getReposStatus repos, (->), testComplete 
 
@@ -21,7 +21,7 @@ describe 'Performance of different approches', ->
 
     @timeout 0
 
-    HgOverview.getRepos '~/pld', (err, repos) ->
+    HgOverview.getRepos '~/pld/', (err, repos) ->
 
       getSummary = (s, repo, done) ->
         out = runCommand(s, [ '-R', repo, 'summary' ]).output

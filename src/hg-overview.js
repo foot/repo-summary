@@ -1,4 +1,4 @@
-/*global console,exports,require,module,$*/
+/*global console,exports,require,module,$,process*/
 
 
 (function() {
@@ -14,12 +14,22 @@ var spawn = require('child_process').spawn;
 var es = require('event-stream');
 var cs = require('./hg-commandserver');
 
-var hgSummary = function(repoPath, filename, range) {
-    return spawn('hg', [ 'summary', '-R', repoPath ]);
+var hgSummary = function(server, repo, done) {
+    var proc = spawn('hg', [ 'summary', '-R', repo ]);
+    proc.stdout.setEncoding('utf8');
+    proc.stdout
+        .pipe(es.writeArray(function(err, array) {
+            var text = array.join('').trim();
+            var value = parseSummary(text);
+            done(null, value);
+        }));
 };
 
 
 var parseSummary = function(data) {
+    
+    console.log('parsing..');
+
     var lines = data.trim().split('\n');
     var head = lines[0];
     var message = lines[1].trim();
@@ -37,11 +47,15 @@ var parseSummary = function(data) {
 
 
 var getSummary = function(server, repo, done) {
-  cs.runCommand(server, [ '-R', repo, 'summary' ]).output
-    .pipe(es.writeArray(function(err, array) {
-      var value = parseSummary(array.join('').trim());
-      done(null, value);
-    }));
+
+    cs.runCommand(server, [ '-R', repo, 'summary' ])
+        .output
+        .pipe(es.writeArray(function(err, array) {
+            var text = array.join('').trim();
+            var value = parseSummary(text);
+            done(null, value);
+        }));
+
 };
 
 
@@ -92,7 +106,7 @@ var getReposStatus = function(repos, callback, finished) {
 
   // split up the work across all the repos.
   var n = Math.min(5, repos.length);
-  var l = Math.floor(repos.length / n);
+  var l = Math.ceil(repos.length / n);
   var repoSlices = _.range(n).map(function(i) {
     return repos.slice(i * l, (i + 1) * l);
   });
@@ -101,7 +115,10 @@ var getReposStatus = function(repos, callback, finished) {
     var server = cs.commandServer();
     return function(done) {
       server.start(repos[0], function() {
-        _getReposStatus(server, repos, callback, done);
+        _getReposStatus(server, repos, callback, function() {
+            server.stop();
+            done();
+        });
       });
     };
   });
