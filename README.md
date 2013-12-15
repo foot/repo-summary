@@ -1,7 +1,9 @@
 repo-summary
 ============
 
-Launch it in a folder and watch as it summarizes the directory structure!
+Little program that provides an overview of the state of multiple mercurial repositories.
+
+Requires node-webkit.
 
 [![Basic demo](https://github.com/foot/repo-summary/raw/master/screenshots/basic.png)](#demo)
 
