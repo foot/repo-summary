@@ -20,9 +20,8 @@ var massageDirList = function(data) {
             }
 
             var index = node.children
-            .map(function(c) { return c.name; })
-            .indexOf(elem);
-
+                .map(function(c) { return c.name; })
+                .indexOf(elem);
 
             var child = node.children[index];
 
@@ -54,7 +53,6 @@ var collapseRoot = function(root) {
         name: names.join('/'),
         children: n.children
     };
-
 };
 
 

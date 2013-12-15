@@ -1,8 +1,6 @@
 /* global $ */
 
 
-
-
 var root = this;
 
 
@@ -19,9 +17,9 @@ root.MainCtrl = function($scope) {
 
     var svg = root.newSvg('.diagram');
     var chart = root.newChart();
+
     var fitToWindow = function() {
         svg.resize($(window).width(), 500);
-
         chart.width($(window).width());
         chart.height(500);
     };
@@ -29,38 +27,19 @@ root.MainCtrl = function($scope) {
     $(window).on('resize', fitToWindow);
 
     chart
-        .on('mousedown', function(d) {
-            console.log(d);
-        })
         .on('mouseover', function(d) {
-          var c = chart.arc.centroid(d);
-          var x = svg.x.invert(c[0]);
-          var y = svg.y.invert(c[1]);
-          var placement = c[1] > 0 ? 'top' : 'bottom';
-          var popover = $(this)
-              .popover({
-                title: d.name,
-                content: d.branch,
-                trigger: 'manual',
-                container: '.diagram',
-                placement: placement
-              })
-              .popover('show');
-
-          var w = popover.data('popover').tip().width();
-          var h = popover.data('popover').tip().height();
-
-          popover
-              .data('popover')
-              .applyPlacement({ left: x - w * 0.5, top: y - 30 }, 'top');
+            var c = chart.arc.centroid(d);
+            var x = svg.x.invert(c[0]);
+            var y = svg.y.invert(c[1]);
+            showTooltip(d, x, y);
         })
         .on('mouseout', function(d) {
-          $(this).popover('destroy');
+            $(this).popover('destroy');
         });
 
     $scope.$watch('repos', function() {
-      svg.datum(root.massageDirList($scope.repos))
-          .call(chart);
+        svg.datum(root.massageDirList($scope.repos))
+            .call(chart);
     }, true);
 
     $scope.update = function() {
@@ -87,7 +66,7 @@ root.MainCtrl = function($scope) {
 
                     _(repo).extend(summary);
 
-                    repo.dirty = repo.commit !== '(clean)';
+                    repo.dirty = (repo.commit !== '(clean)');
                 });
             });
 
@@ -98,3 +77,22 @@ root.MainCtrl = function($scope) {
 };
 
 
+var showTooltip = function(d, x, y) {
+
+    var popover = $(this)
+        .popover({
+            title: d.name,
+            content: d.branch,
+            trigger: 'manual',
+            container: '.diagram',
+            placement: 'top'
+        })
+        .popover('show');
+
+    var w = popover.data('popover').tip().width();
+    var h = popover.data('popover').tip().height();
+
+    popover
+        .data('popover')
+        .applyPlacement({ left: x - w * 0.5, top: y - 30 }, 'top');
+};
