@@ -1,12 +1,11 @@
 var Stream = require('stream'),
-
     hg = require('hg');
 
 
 var STREAM_TYPES = ['output', 'error', 'debug', 'result'];
 
 
-var _createCommandStreams = function(server) {
+var _createStreams = function(server) {
   var streams = {};
 
   STREAM_TYPES.forEach(function(streamName) {
@@ -36,7 +35,7 @@ var commandServer = function() {
 
 
 var runCommand = function(server, args) {
-  var streams = _createCommandStreams(server);
+  var streams = _createStreams(server);
   server.runcommand.apply(server, args);
   return streams;
 };

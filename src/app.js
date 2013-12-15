@@ -1,4 +1,5 @@
-/*global require,console,d3*/
+/*global require,console,d3,$*/
+"use strict";
 
 
 var root = this;
@@ -27,12 +28,15 @@ root.MainCtrl = function($scope) {
     $(window).on('resize', fitToWindow);
 
     chart
+        .on('mousedown', function(d) {
+            console.log(d);
+        })
         .on('mouseover', function(d) {
           var c = chart.arc.centroid(d);
           var x = svg.x.invert(c[0]);
           var y = svg.y.invert(c[1]);
           var placement = c[1] > 0 ? 'top' : 'bottom';
-          $(this)
+          var popover = $(this)
               .popover({
                 title: d.name,
                 content: d.branch,
@@ -41,9 +45,13 @@ root.MainCtrl = function($scope) {
                 placement: placement
               })
               .popover('show');
-              // grab the popover!
-              // .data('popover')
-                  // .applyPlacement({ left: x, top: y }, 'top');
+
+          var w = popover.data('popover').tip().width();
+          var h = popover.data('popover').tip().height();
+
+          popover
+              .data('popover')
+              .applyPlacement({ left: x - w * 0.5, top: y - 30 }, 'top');
         })
         .on('mouseout', function(d) {
           $(this).popover('destroy');

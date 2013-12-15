@@ -139,6 +139,7 @@ var baseSvgTransforms = function(g, width, height) {
 
 
 var newSvg = function(container) {
+
     svg = d3.select(container).append('svg').append('g');
 
     var setScale = function(width, height) {

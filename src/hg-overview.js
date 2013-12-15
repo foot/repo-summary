@@ -28,8 +28,6 @@ var hgSummary = function(server, repo, done) {
 
 var parseSummary = function(data) {
     
-    console.log('parsing..');
-
     var lines = data.trim().split('\n');
     var head = lines[0];
     var message = lines[1].trim();
