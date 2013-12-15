@@ -8,7 +8,7 @@
 
 es = require 'event-stream'
 
-{commandServer, runCommand} = require './hg-commandserver'
+{commandServer, runCommand} = require '../src/hg-commandserver'
 
 
 MakeTempRepo = (done) ->

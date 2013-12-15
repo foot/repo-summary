@@ -1,6 +1,6 @@
 
 expect = require('chai').expect
-g = require './directory-chart'
+g = require '../src/directory-chart'
 
 describe "collapseRoot", ->
 

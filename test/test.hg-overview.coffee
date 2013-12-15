@@ -1,6 +1,6 @@
 
 expect = require('chai').expect
-HgOverview = require './hg-overview'
+HgOverview = require '../src/hg-overview'
 
 
 describe 'Parsing the hg summary output', ->

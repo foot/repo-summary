@@ -11,6 +11,13 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "components"
-  ]
+    "components",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "authors": [
+    "Simon Howe <footless@gmail.com>"
+  ],
+  "license": "MIT"
 }

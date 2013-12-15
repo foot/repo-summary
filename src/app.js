@@ -1,12 +1,13 @@
-/*global require,console,d3,$*/
-"use strict";
+/* global $ */
+
+
 
 
 var root = this;
 
 
 var _ = require('underscore');
-var HgOverview = require('./src/hg-overview');
+var hgoverview = require('./src/hg-overview');
 
 
 var ROOT_PATH = '~/src';
@@ -18,7 +19,7 @@ root.MainCtrl = function($scope) {
 
     var svg = root.newSvg('.diagram');
     var chart = root.newChart();
-    var fitToWindow = function() { 
+    var fitToWindow = function() {
         svg.resize($(window).width(), 500);
 
         chart.width($(window).width());
@@ -58,7 +59,7 @@ root.MainCtrl = function($scope) {
         });
 
     $scope.$watch('repos', function() {
-      svg.datum(massageDirList($scope.repos))
+      svg.datum(root.massageDirList($scope.repos))
           .call(chart);
     }, true);
 
@@ -66,7 +67,7 @@ root.MainCtrl = function($scope) {
 
         $scope.repos = [];
 
-        HgOverview.getRepos($scope.rootPath, function(err, repos) {
+        hgoverview.getRepos($scope.rootPath, function(err, repos) {
 
             $scope.$apply(function() {
                 $scope.repos = repos.map(function(path) {
@@ -76,7 +77,8 @@ root.MainCtrl = function($scope) {
                 });
             });
 
-            HgOverview.getReposStatus(repos, function(err, path, summary) {
+            hgoverview.getReposStatus(repos, function(err, path, summary) {
+
                 $scope.$apply(function() {
 
                     var repo = _($scope.repos).find(function(r) {
@@ -94,3 +96,5 @@ root.MainCtrl = function($scope) {
 
     $scope.update();
 };
+
+

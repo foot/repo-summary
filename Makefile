@@ -1,8 +1,9 @@
 
 MOCHA=node_modules/mocha/bin/mocha
 
+.PHONY: test
 test:
-	${MOCHA} --ui bdd src/test.* --compilers coffee:coffee-script
+	${MOCHA} --ui bdd test/* --compilers coffee:coffee-script
 
 profile:
 	${MOCHA} \
