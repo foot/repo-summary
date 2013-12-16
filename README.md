@@ -1,9 +1,8 @@
 repo-summary
 ============
 
-Little program that provides an overview of the state of multiple mercurial repositories.
-
-Requires node-webkit.
+Little program that provides an overview of the state of multiple mercurial
+repositories. Uses node-webkit.
 
 ```shell
 git clone https://github.com/foot/repo-summary.git
