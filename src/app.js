@@ -31,7 +31,7 @@ root.MainCtrl = function($scope) {
             var c = chart.arc.centroid(d);
             var x = svg.x.invert(c[0]);
             var y = svg.y.invert(c[1]);
-            showTooltip(d, x, y);
+            showTooltip(d, this, x, y);
         })
         .on('mouseout', function(d) {
             $(this).popover('destroy');
@@ -77,9 +77,9 @@ root.MainCtrl = function($scope) {
 };
 
 
-var showTooltip = function(d, x, y) {
+var showTooltip = function(d, el, x, y) {
 
-    var popover = $(this)
+    var popover = $(el)
         .popover({
             title: d.name,
             content: d.branch,
