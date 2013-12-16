@@ -11,7 +11,8 @@
     "mocha": "~1.10.0",
     "chai": "~1.6.0",
     "coffee-script": "~1.6.2",
-    "event-stream": "~3.0.14"
+    "event-stream": "~3.0.14",
+    "hg": "0.0.4"
   },
   "window": {
     "width": 660,
