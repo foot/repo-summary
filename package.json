@@ -12,7 +12,8 @@
     "chai": "~1.6.0",
     "coffee-script": "~1.6.2",
     "event-stream": "~3.0.14",
-    "hg": "0.0.4"
+    "hg": "0.0.4",
+    "nodewebkit": "~0.8.2-1"
   },
   "window": {
     "width": 660,
@@ -29,7 +30,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "nodewebkit"
   },
   "author": "",
   "license": "BSD"

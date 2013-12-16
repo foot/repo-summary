@@ -11,3 +11,8 @@ profile:
 		--compilers coffee:coffee-script \
 		--reporter list \
 		src/test-performance.coffee
+
+.PHONY: setup
+setup:
+	npm install
+	bower install
